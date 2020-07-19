@@ -1,3 +1,4 @@
+import FirebaseContext, { withFirebase } from './context';
 import app from 'firebase/app';
 import 'firebase/auth';
 
@@ -21,18 +22,35 @@ class Firebase {
 
 	// Authentication API
 	doCreateUserWithEmailAndPassword = (email, password) => {
-		this.auth.createUserWithEmailAndPassword(email, password);
+		return this.auth
+			.createUserWithEmailAndPassword(email, password)
+			.then((response) => console.log(response))
+			.catch((err) => console.log(err));
 	};
 
 	doSignInWithEmailAndPassword = (email, password) => {
-		this.auth.signInWithEmailAndPassword(email, password);
+		return this.auth.signInWithEmailAndPassword(email, password)
+        .then((response) => console.log(response))
+        .catch((err) => console.log(err));
 	};
 
-	doSignOut = () => this.auth.signOut();
+	doSignOut = () => {
+		return this.auth.signOut()
+        .then((response) => console.log(response))
+        .catch((err) => console.log(err));
+	};
 
-	doPasswordReset = (email) => this.auth.sendPasswordResetEmail(email);
+	doPasswordReset = (email) => {
+		return this.auth.sendPasswordResetEmail(email)
+        .then((response) => console.log(response))
+        .catch((err) => console.log(err));
+	};
 
-	doPasswordUpdate = (password) =>
-		this.auth.currentUser.updatePassword(password);
+	doPasswordUpdate = (password) => {
+		return this.auth.currentUser.updatePassword(password)
+        .then((response) => console.log(response))
+        .catch((err) => console.log(err));
+	};
 }
 export default Firebase;
+export { FirebaseContext, withFirebase };
