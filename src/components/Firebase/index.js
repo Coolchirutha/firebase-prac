@@ -1,6 +1,7 @@
 import FirebaseContext, { withFirebase } from './context';
 import app from 'firebase/app';
 import 'firebase/auth';
+import 'firebase/database';
 
 const firebaseConfig = {
 	apiKey: process.env.REACT_APP_API_KEY,
@@ -18,6 +19,7 @@ class Firebase {
 		app.initializeApp(firebaseConfig);
 
 		this.auth = app.auth();
+		this.db = app.db();
 	}
 
 	// Authentication API
@@ -29,28 +31,38 @@ class Firebase {
 	};
 
 	doSignInWithEmailAndPassword = (email, password) => {
-		return this.auth.signInWithEmailAndPassword(email, password)
-        .then((response) => console.log(response))
-        .catch((err) => console.log(err));
+		return this.auth
+			.signInWithEmailAndPassword(email, password)
+			.then((response) => console.log(response))
+			.catch((err) => console.log(err));
 	};
 
 	doSignOut = () => {
-		return this.auth.signOut()
-        .then((response) => console.log(response))
-        .catch((err) => console.log(err));
+		return this.auth
+			.signOut()
+			.then((response) => console.log(response))
+			.catch((err) => console.log(err));
 	};
 
 	doPasswordReset = (email) => {
-		return this.auth.sendPasswordResetEmail(email)
-        .then((response) => console.log(response))
-        .catch((err) => console.log(err));
+		return this.auth
+			.sendPasswordResetEmail(email)
+			.then((response) => console.log(response))
+			.catch((err) => console.log(err));
 	};
 
 	doPasswordUpdate = (password) => {
-		return this.auth.currentUser.updatePassword(password)
-        .then((response) => console.log(response))
-        .catch((err) => console.log(err));
+		return this.auth.currentUser
+			.updatePassword(password)
+			.then((response) => console.log(response))
+			.catch((err) => console.log(err));
 	};
+
+	// Access to individual or mass user data
+
+	user = (uid) => this.db.ref(`users/${uid}`);
+
+	users = () => this.db.ref('users');
 }
 export default Firebase;
 export { FirebaseContext, withFirebase };
